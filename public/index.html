@@ -3,6 +3,31 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <style>
+    .filters {
+      background: #eee;
+      padding: 10px;
+    }
+
+    #list {
+      margin: 10px 0;
+      padding: 0;
+    }
+
+    #list li {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      list-style: none;
+      margin: 5px 0;
+      padding: 5px;
+    }
+
+    .jumbotron p {
+      font-size: 14px;
+    }
+  </style>
 </head>
 
 <body>
@@ -20,13 +45,14 @@
       <h2>Caching POST Requests with Service Worker</h2>
       <p>This is a sample to demonstrate the practice of caching GraphQL POST requests with Service Worker.
         Caching POST requests is not possible with Workbox due to the limitation of Cache Storage API.</p>
+      <p>Github: <a href="https://github.com/jonchenn/sw-graphql">https://github.com/jonchenn/sw-graphql</a></p>
     </div>
   </div>
 
   <div class="container">
-    <h2>2018 Michelin-Star Restaurants in New York City</h2>
+    <h3>2018 Michelin-Star Restaurants in New York City (Sampled)</h3>
 
-    <form class="form-inline">
+    <form class="form-inline filters">
       <div class="form-group">
         <label for="stars">Michelin Stars</label>
         <select class="form-control" id="stars">
@@ -51,27 +77,35 @@
       </div>
     </form>
 
+    <h3>Result (<span id="count">Loading...</span>)</h3>
     <ul id="list">
     </ul>
 
     <footer>
-      <p>Github: <a href="https://github.com/jonchenn/sw-graphql">https://github.com/jonchenn/sw-graphql</a></p>
     </footer>
   </div>
   <script>
-    // if ('serviceWorker' in navigator) {
-    //   window.addEventListener('load', function() {
-    //     navigator.serviceWorker.register('/sw.js').then(function(registration) {
-    //       // Registration was successful
-    //       console.log('ServiceWorker registration successful with scope: ', registration.scope);
-    //     }, function(err) {
-    //       // registration failed :(
-    //       console.log('ServiceWorker registration failed: ', err);
-    //     });
-    //   });
-    // }
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js').then(function(registration) {
+          // Registration was successful
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          // Initializing list.
+          updateList(null, null);
+        }, function(err) {
+          // registration failed :(
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    } else {
+      // Initializing list.
+      updateList(null, null);
+    }
 
     function updateList(type, stars) {
+      $('#count').text('Loading...');
+      $('#list').empty();
+
       let queryString = `
         {
           restaurants(type: ${type}, stars: ${stars}) {
@@ -88,19 +122,20 @@
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          'query': queryString
+          'query': queryString.replace(/\s{2,}/g, ' ')
         }),
       })
       .then(async (response) => {
         let result = await response.json();
-        $('#list').empty();
-        result.data.restaurants.forEach((restaurant) => {
+        let restaurants = result.data.restaurants;
+        restaurants.forEach((restaurant) => {
           $('#list').append(`
             <li>
-              <h3>${restaurant.name}</h3>
+              <h4>${restaurant.name}</h4>
               <div>${restaurant.stars} star(s)</div>
             </li>`);
         });
+        $('#count').text(restaurants.length);
       });
     }
 
@@ -110,9 +145,6 @@
       stars = stars === 'ALL' ? null : stars;
       updateList(type, stars);
     });
-
-    // Initializing list.
-    updateList(null, null);
   </script>
 </body>
 

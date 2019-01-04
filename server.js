@@ -71,6 +71,12 @@ var restaurantData = [
   }
 ]
 
+function sleep(ms){
+  return new Promise(resolve => {
+    setTimeout(resolve,ms)
+  })
+}
+
 // The root provides a resolver function for each API endpoint
 var root = {
   restaurant: (args) => {
@@ -79,7 +85,7 @@ var root = {
       return restaurant.id == id;
     })[0];
   },
-  restaurants: (args) => {
+  restaurants: async (args) => {
     var result = restaurantData;
     if (args.type) {
       result = result.filter(restaurant => restaurant.type === args.type);
@@ -87,6 +93,10 @@ var root = {
     if (args.stars) {
       result = result.filter(restaurant => restaurant.stars === args.stars);
     }
+
+    // Simulated long latency of complex queries.
+    await sleep(3000)
+
     return result;
   }
 };
