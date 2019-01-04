@@ -15,9 +15,9 @@ npm install
 node server.js
 ```
 
-### Test GraphQL API endpoint
+### Test GraphQL API endpoint (Optional)
 
-(Optional) You can open up http://localhost:4000/graphql to test GraphQL API endpoint with the following query string:
+You can open up http://localhost:4000/graphql to test GraphQL API endpoint with the following query string:
 
 ```
 {

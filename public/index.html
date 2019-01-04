@@ -1,11 +1,63 @@
 <html>
 <head>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
-<body>
-  <h1>Service Worker - GraphQL</h1>
-  <ul id="result"></ul>
 
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Service Worker with GraphQL</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <div class="container">
+      <h2>Caching POST Requests with Service Worker</h2>
+      <p>This is a sample to demonstrate the practice of caching GraphQL POST requests with Service Worker.
+        Caching POST requests is not possible with Workbox due to the limitation of Cache Storage API.</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>2018 Michelin-Star Restaurants in New York City</h2>
+
+    <form class="form-inline">
+      <div class="form-group">
+        <label for="stars">Michelin Stars</label>
+        <select class="form-control" id="stars">
+          <option>ALL</option>
+          <option>3</option>
+          <option>2</option>
+          <option>1</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="type">Restaurant Type</label>
+        <select class="form-control" id="type">
+          <option>ALL</option>
+          <option>American</option>
+          <option>European</option>
+          <option>French</option>
+          <option>Italian</option>
+          <option>Indian</option>
+          <option>Japanese</option>
+        </select>
+      </div>
+    </form>
+
+    <ul id="list">
+    </ul>
+
+    <footer>
+      <p>Github: <a href="https://github.com/jonchenn/sw-graphql">https://github.com/jonchenn/sw-graphql</a></p>
+    </footer>
+  </div>
   <script>
     // if ('serviceWorker' in navigator) {
     //   window.addEventListener('load', function() {
@@ -19,21 +71,48 @@
     //   });
     // }
 
-    var data = {
-      "courseID": 1
-    };
+    function updateList(type, stars) {
+      let queryString = `
+        {
+          restaurants(type: ${type}, stars: ${stars}) {
+            name
+            stars
+          }
+        }
+      `;
 
-    fetch('/graphql/', {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-    .then((response) => {
-      console.log(response);
+      fetch('/graphql', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          'query': queryString
+        }),
+      })
+      .then(async (response) => {
+        let result = await response.json();
+        $('#list').empty();
+        result.data.restaurants.forEach((restaurant) => {
+          $('#list').append(`
+            <li>
+              <h3>${restaurant.name}</h3>
+              <div>${restaurant.stars} star(s)</div>
+            </li>`);
+        });
+      });
+    }
+
+    $('select#type, select#stars').change(() => {
+      let type = $('select#type').val(), stars = $('select#stars').val();
+      type = type === 'ALL' ? null : `"${type}"`;
+      stars = stars === 'ALL' ? null : stars;
+      updateList(type, stars);
     });
+
+    // Initializing list.
+    updateList(null, null);
   </script>
 </body>
 

@@ -36,7 +36,7 @@ var restaurantData = [
   {
     id: 3,
     name: 'Aquavit',
-    type: 'Contemporary European',
+    type: 'European',
     stars: 2,
   },
   {
