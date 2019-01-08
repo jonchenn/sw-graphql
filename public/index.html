@@ -8,6 +8,10 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
   <style>
+    .gray-text {
+      color: #999;
+    }
+
     .filters form {
       margin: 0;
     }
@@ -64,10 +68,6 @@
       margin-bottom: 10px;
     }
 
-    .jumbotron p {
-      font-size: 16px;
-    }
-
     .pull-right {
       float: right;
     }
@@ -80,7 +80,7 @@
     <a class="btn btn-outline-primary" href="https://github.com/jonchenn/sw-graphql">Github</a>
   </div>
 
-  <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+  <div class="gray-text container px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4">SW+GraphQL</h1>
     <p class="lead">
       This is a sample to demonstrate the practice of caching GraphQL POST requests with Service Worker. Caching POST requests is not possible with Workbox due to the limitation of Cache Storage API.
@@ -122,7 +122,7 @@
     </div>
 
     <hr>
-    <h3>Result (<span id="count">Loading...</span>)</h3>
+    <h3 class="gray-text">Result (<span id="count">Loading...</span>)</h3>
     <ul id="list"></ul>
   </div>
 
