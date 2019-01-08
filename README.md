@@ -1,4 +1,4 @@
-# Use Service Worker to cache GraphQL POST requests
+# Cache GraphQL POST requests with Service Worker
 
 ## TL;DR
 
