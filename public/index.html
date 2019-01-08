@@ -1,13 +1,23 @@
 <html>
 <head>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
   <style>
-    .filters {
-      background: #eee;
-      padding: 10px;
+    .filters form {
+      margin: 0;
+    }
+
+    .form-group {
+      margin-right: 20px;
+    }
+
+    .form-group label {
+      margin-right: 10px;
     }
 
     #list {
@@ -24,66 +34,98 @@
       padding: 5px;
     }
 
+    .stars {
+      font-size: 3em;
+      color: #c65058;
+      -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+      -webkit-text-stroke-width: 2px;
+      -webkit-text-stroke-color: #c65058;
+      vertical-align: middle;
+      display: inline-block;
+      line-height: 30px;
+      height: 15px;
+      margin-left: 10px;
+    }
+
+    .star-3::after {
+      content: "***"
+    }
+
+    .star-2::after {
+      content: "**"
+    }
+
+    .star-1::after {
+      content: "*"
+    }
+
+    .type {
+      color: #c65058;
+      margin-bottom: 10px;
+    }
+
     .jumbotron p {
       font-size: 16px;
+    }
+
+    .pull-right {
+      float: right;
     }
   </style>
 </head>
 
 <body>
-  <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="#">Service Worker with GraphQL</a>
-      </div>
-    </div>
-  </nav>
+  <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <h5 class="my-0 mr-md-auto font-weight-normal">Service Worker with GraphQL</h5>
+    <a class="btn btn-outline-primary" href="https://github.com/jonchenn/sw-graphql">Github</a>
+  </div>
 
-  <!-- Main jumbotron for a primary marketing message or call to action -->
-  <div class="jumbotron">
-    <div class="container">
-      <h2>Caching POST Requests with Service Worker</h2>
-      <p>This is a sample to demonstrate the practice of caching GraphQL POST requests with Service Worker.
-        Caching POST requests is not possible with Workbox due to the limitation of Cache Storage API.</p>
-      <p>Github: <a href="https://github.com/jonchenn/sw-graphql">https://github.com/jonchenn/sw-graphql</a></p>
-    </div>
+  <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">SW+GraphQL</h1>
+    <p class="lead">
+      This is a sample to demonstrate the practice of caching GraphQL POST requests with Service Worker. Caching POST requests is not possible with Workbox due to the limitation of Cache Storage API.
+    </p>
   </div>
 
   <div class="container">
-    <h3>2018 Michelin-Star Restaurants in New York City (Sampled)</h3>
-
-    <form class="form-inline filters">
-      <div class="form-group">
-        <label for="stars">Michelin Stars</label>
-        <select class="form-control" id="stars">
-          <option>ALL</option>
-          <option>3</option>
-          <option>2</option>
-          <option>1</option>
-        </select>
+    <div>
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header">
+          <h4 class="my-0 font-weight-normal">2018 Michelin-Star Restaurants in New York City (Sampled)</h4>
+        </div>
+        <div class="card-body">
+          <form class="form-inline filters">
+            <div class="form-group">
+              <label for="stars">Michelin Stars</label>
+              <select class="form-control" id="stars">
+                <option>ALL</option>
+                <option>3</option>
+                <option>2</option>
+                <option>1</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="type">Restaurant Type</label>
+              <select class="form-control" id="type">
+                <option>ALL</option>
+                <option>American</option>
+                <option>European</option>
+                <option>French</option>
+                <option>Italian</option>
+                <option>Indian</option>
+                <option>Japanese</option>
+              </select>
+            </div>
+          </form>
+        </div>
       </div>
+    </div>
 
-      <div class="form-group">
-        <label for="type">Restaurant Type</label>
-        <select class="form-control" id="type">
-          <option>ALL</option>
-          <option>American</option>
-          <option>European</option>
-          <option>French</option>
-          <option>Italian</option>
-          <option>Indian</option>
-          <option>Japanese</option>
-        </select>
-      </div>
-    </form>
-
+    <hr>
     <h3>Result (<span id="count">Loading...</span>)</h3>
-    <ul id="list">
-    </ul>
-
-    <footer>
-    </footer>
+    <ul id="list"></ul>
   </div>
+
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
@@ -110,6 +152,8 @@
         {
           restaurants(type: ${type}, stars: ${stars}) {
             name
+            type
+            map
             stars
           }
         }
@@ -130,9 +174,16 @@
         let restaurants = result.data.restaurants;
         restaurants.forEach((restaurant) => {
           $('#list').append(`
-            <li>
-              <h4>${restaurant.name}</h4>
-              <div>${restaurant.stars} star(s)</div>
+            <li class="card">
+              <div class="card-body row">
+                <div class="col-sm-8">
+                  <h4>${restaurant.name}<span class="stars star-${restaurant.stars}"></span></h4>
+                  <div class="type">${restaurant.type}</div>
+                </div>
+                <div class="col-sm-4">
+                  <a class="btn btn-outline-primary pull-right" target="_blank" href="${restaurant.map}">Direction</a>
+                </div>
+              </div>
             </li>`);
         });
         $('#count').text(restaurants.length);
