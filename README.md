@@ -2,7 +2,7 @@
 
 ## TL;DR
 
-This is a demo of how to use service worker to cache GraphQL POST requests. As [Cache Storage API](https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage) doesn't support caching POST requests, the option is to cache POST responses in IndexedDB instead of the Cache Storage.
+This is a demo that demonstrates caching GraphQL POST requests with service worker. As [Cache Storage API](https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage) doesn't support caching POST requests, the solution is to cache POST responses in IndexedDB instead of the Cache Storage.
 
 Sine Workbox uses CacheStorage API by default, we will hand-craft the service worker caching functionality in this demo instead of using Workbox.
 
