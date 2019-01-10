@@ -1,3 +1,4 @@
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.6.1/workbox-sw.js');
 importScripts('https://cdnjs.cloudflare.com/ajax/libs/dexie/2.0.4/dexie.min.js');
 
 var CACHE_NAME = 'main-cache-v1';
@@ -11,27 +12,22 @@ db.version(1).stores({
   post_cache: 'key,response,timestamp'
 });
 
-// When installing SW.
-self.addEventListener('install', (event) => {
-  // Perform install steps
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-    .then((cache) => {
-      console.log('Opened cache');
-      return cache.addAll(urlsToCache);
-    })
-  );
-});
+if (workbox) {
+  console.log(`Yay! Workbox is loaded 🎉`);
+} else {
+  console.log(`Boo! Workbox didn't load 😬`);
+}
 
-// Return cached response when possible, and fetch new results from server in
-// the background and update the cache.
-self.addEventListener('fetch', async (event) => {
-  if (event.request.method === 'POST') {
-    event.respondWith(staleWhileRevalidate(event));
-  }
-
-  // TODO: Handles other types of requests.
-});
+// Workbox with custom handler to use IndexedDB for cache.
+workbox.routing.registerRoute(
+  '/graphql',
+  // Uncomment below to see the error thrown from Cache Storage API.
+  //workbox.strategies.staleWhileRevalidate(),
+  async ({event}) => {
+    return staleWhileRevalidate(event);
+  },
+  'POST'
+);
 
 async function staleWhileRevalidate(event) {
   let promise = null;

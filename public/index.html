@@ -91,7 +91,7 @@
     <div>
       <div class="card mb-4 shadow-sm">
         <div class="card-header">
-          <h4 class="my-0 font-weight-normal">2018 Michelin-Star Restaurants in New York City (Sampled)</h4>
+          <h4 class="my-0 font-weight-normal">NYC's 2019 Michelin-Starred Restaurants (Sampled)</h4>
         </div>
         <div class="card-body">
           <form class="form-inline filters">
@@ -129,6 +129,7 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
+        // navigator.serviceWorker.register('/sw-workbox.js').then(function(registration) {
         navigator.serviceWorker.register('/sw.js').then(function(registration) {
           // Registration was successful
           console.log('ServiceWorker registration successful with scope: ', registration.scope);

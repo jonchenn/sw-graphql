@@ -14,7 +14,7 @@ Install Node modules and run node server locally. This will open up http://local
 
 ```
 npm install
-node server.js
+npm start
 ```
 
 ### Inspect and live-reload server
