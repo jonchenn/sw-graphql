@@ -1,4 +1,5 @@
 importScripts('https://cdnjs.cloudflare.com/ajax/libs/dexie/2.0.4/dexie.min.js');
+importScripts('https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js');
 
 var CACHE_NAME = 'main-cache-v1';
 var urlsToCache = [
@@ -64,7 +65,7 @@ async function serializeResponse(response) {
 async function setCache(request, response, store) {
   var key, data;
   let body = await request.json();
-  let id = body.query;
+  let id = CryptoJS.MD5(body.query).toString();
 
   var entry = {
     key: id,
@@ -80,7 +81,7 @@ async function setCache(request, response, store) {
 
 async function getCache(request, store) {
   let body = await request.json();
-  let id = body.query;
+  let id = CryptoJS.MD5(body.query).toString();
   let data = await store.get(id);
   return data ? new Response(
     JSON.stringify(data.response.body), data.response) : null;
