@@ -6,6 +6,8 @@ This is a demo that demonstrates caching GraphQL POST requests with service work
 
 Sine Workbox uses CacheStorage API by default, we will hand-craft the service worker caching functionality in this demo instead of using Workbox.
 
+You can check out the live demo at [https://sw-graphql.firebaseapp.com/](https://sw-graphql.firebaseapp.com/)
+
 ## Getting started
 
 ### Start node.js server
