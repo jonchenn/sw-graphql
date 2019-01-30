@@ -129,8 +129,7 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
-        // navigator.serviceWorker.register('/sw.js').then(function(registration) {
-        navigator.serviceWorker.register('/sw-workbox.js').then(function(registration) {
+        navigator.serviceWorker.register('/sw.js').then(function(registration) {
           // Registration was successful
           console.log('ServiceWorker registration successful with scope: ', registration.scope);
           // Initializing list.
@@ -160,11 +159,13 @@
         }
       `;
 
-      fetch('https://us-central1-sw-graphql.cloudfunctions.net/graphql/', {
+      fetch('/graphql', {
+      // fetch('https://us-central1-sw-graphql.cloudfunctions.net/graphql/', {
         method: 'POST',
         mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
+          'Cache-Control': 'max-age=10',
         },
         body: JSON.stringify({
           'query': queryString.replace(/\s{2,}/g, ' ')
