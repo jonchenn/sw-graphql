@@ -1,16 +1,13 @@
-importScripts('https://cdnjs.cloudflare.com/ajax/libs/dexie/2.0.4/dexie.min.js');
 importScripts('https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js');
+importScripts('https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval-iife.min.js');
 
 var CACHE_NAME = 'main-cache-v1';
 var urlsToCache = [
   // '/index.html',
 ];
 
-// Init indexedDB using Dexie.js (https://dexie.org/).
-const db = new Dexie('GraphQL-Cache');
-db.version(1).stores({
-  post_cache: 'key,response,timestamp'
-});
+// Init indexedDB using idb-keyval, https://github.com/jakearchibald/idb-keyval
+const store = new idbKeyval.Store('GraphQL-Cache', 'PostResponses');
 
 // When installing SW.
 self.addEventListener('install', (event) => {
@@ -36,10 +33,10 @@ self.addEventListener('fetch', async (event) => {
 
 async function staleWhileRevalidate(event) {
   let promise = null;
-  let cachedResponse = await getCache(event.request.clone(), db.post_cache);
+  let cachedResponse = await getCache(event.request.clone());
   let fetchPromise = fetch(event.request.clone())
     .then((response) => {
-      setCache(event.request.clone(), response.clone(), db.post_cache);
+      setCache(event.request.clone(), response.clone());
       return response;
     })
     .catch((err) => {
@@ -62,27 +59,26 @@ async function serializeResponse(response) {
   return serialized;
 }
 
-async function setCache(request, response, store) {
+async function setCache(request, response) {
   var key, data;
   let body = await request.json();
   let id = CryptoJS.MD5(body.query).toString();
 
   var entry = {
-    key: id,
     response: await serializeResponse(response),
     timestamp: Date.now()
   };
-  store
-    .add(entry)
-    .catch(function(error) {
-      store.update(entry.key, entry);
-    });
+  idbKeyval.set(id, entry, store);
+    // .add(entry)
+    // .catch(function(error) {
+    //   store.update(entry.key, entry);
+    // });
 }
 
-async function getCache(request, store) {
+async function getCache(request) {
   let body = await request.json();
   let id = CryptoJS.MD5(body.query).toString();
-  let data = await store.get(id);
+  let data = await idbKeyval.get(id, store);
   return data ? new Response(
     JSON.stringify(data.response.body), data.response) : null;
 }
