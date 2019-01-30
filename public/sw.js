@@ -18,7 +18,7 @@ if (workbox) {
 
 // Workbox with custom handler to use IndexedDB for cache.
 workbox.routing.registerRoute(
-  '/graphql',
+  new RegExp('/graphql(/)?'),
   // Uncomment below to see the error thrown from Cache Storage API.
   //workbox.strategies.staleWhileRevalidate(),
   async ({
