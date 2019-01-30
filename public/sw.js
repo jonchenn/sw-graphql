@@ -69,10 +69,6 @@ async function setCache(request, response) {
     timestamp: Date.now()
   };
   idbKeyval.set(id, entry, store);
-    // .add(entry)
-    // .catch(function(error) {
-    //   store.update(entry.key, entry);
-    // });
 }
 
 async function getCache(request) {
