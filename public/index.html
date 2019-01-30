@@ -165,7 +165,7 @@
         mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
-          'Cache-Control': 'max-age=10',
+          'Cache-Control': 'max-age=60',
         },
         body: JSON.stringify({
           'query': queryString.replace(/\s{2,}/g, ' ')
