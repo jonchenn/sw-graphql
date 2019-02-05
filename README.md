@@ -1,5 +1,8 @@
 # Cache GraphQL POST requests with Service Worker
 
+Please check out the [Cache GraphQL POST requests with Service Worker
+](https://medium.com/@jono/cache-graphql-post-requests-with-service-worker-100a822a388a) on Medium for a walkthrough of the solution in details.
+
 ## TL;DR
 
 This is a demo that demonstrates caching GraphQL POST requests with service worker. As [Cache Storage API](https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage) doesn't support caching POST requests, the solution is to cache POST responses in IndexedDB instead of the Cache Storage.
